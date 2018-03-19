@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<style>
+			#img {
+				width: 140px;
+				height: 140px;
+				background: #ccc;
+				border-radius: 50%;
+				margin-left: 45%;
+			}
+			
+			.inp {
+				margin-left: 45%;
+			}
+			
+			#img img {
+				border-radius: 50%;
+			}
+			
+			#jin {
+				width: 300px;
+				border: 1px #669CB8 solid;
+				box-shadow: 0px 2px 2px #D0D4D6;
+				height: 15px;
+				border-radius: 10px;
+				background: -wiebkit-gradient(linear, 0 0, 0 100%, from(#E1E9EE), to(white));
+				padding: 1px;
+			}
+			
+			#div {
+				width: 0%;
+				height: 100%;
+				border-radius: 10px;
+				transition: width 0.5s ease-in-out;
+			}
+		</style>
+		<link rel="stylesheet" href="js/bootstrap.min.css" />
+	</head>
+
+	<body>
+<!--
+             首页
+-->
+		<div class='container' id='f1'>
+			<div class='container'>
+				<div id="img">
+
+				</div>
+				<div class='inp'>
+					头像：<input type="file" id="files">
+				</div>
+			</div>
+
+			<form>
+				<div class='form-group'>
+				</div>
+				<div class='form-group'>
+					<label>用户名:</label>
+					<input type="" name="" class='form-control' id='user' value=''>
+				</div>
+				<div class='form-group'>
+					<label>密码:</label>
+					<input type="password" name="" class='form-control' id='pass' value="">
+				</div>
+				<div class='form-group'>
+
+					<input type="button" name="" class='form-control btn btn-default btn-info' id='de' value="登录" style="margin-bottom:30px">
+					<input type="button" name="" class='form-control btn btn-default btn-info' id='zhu' value="注册">
+
+				</div>
+
+			</form>
+		</div>
+
+		<!--
+        	歌曲   f2
+        -->
+
+		<div class='container hide' id='f2'>
+			<form>
+				<div id='yonghu'></div>
+				<input type="button" name="" class='btn btn-default btn-info center-block btn-lg' value="点击上传你的音乐" style='margin-bottom:30px' data-toggle="modal" data-target="#s1">
+				<input type="search" id='search' name="" class='btn btn-default center-block' value="搜索">
+
+			</form>
+
+			<div class="modal fade" tabindex="-1" role="dialog" id='s1'>
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">上传音乐</h4>
+							<form>
+
+								<div class='form-group'>
+									<div id='imgs'></div>
+									<label>封面图片</label>
+									<input type='file' name="" class='btn btn-default btn-info' id='pic' accept="image/*" />
+								</div>
+								<div class='form-group'>
+									<div id='yinyue'></div>
+									<label>音乐</label>
+									<input type="file" name="" class='btn btn-default btn-info' id='music' accept="audio/x-mpeg">
+								</div>
+								<div class='form-group'>
+									<label>歌曲名</label>
+									<input type="text" name="" class='btn btn-default' value="" id='singer'>
+								</div>
+								<div class='form-group'>
+									<label>歌手</label>
+									<input type="text" name="" class='btn btn-default' value="" id='name'>
+								</div>
+								<div class='form-group'>
+									<input type="button" name="" class='btn btn-default btn-info' value="点击上传" id='okay'>
+								</div>
+
+								<div id="jin" class=' '>
+									<div id="div" class='progress progress-bar progress-bar-success  progress-striped'></div>
+								</div>
+
+							</form>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div id='ac'></div>
+			<table class='table table-hover'>
+				<thead>
+					<tr>
+						<th>封面</th>
+						<th>播放次数</th>
+						<th>歌曲名</th>
+						<th>歌手</th>
+						<th>上传时间</th>
+						<th>暂停</th>
+						<th>播放</th>
+
+					</tr>
+				</thead>
+				<tbody id='tb'>
+
+				</tbody>
+			</table>
+		</div>
+
+		<!--
+    	数据库中的歌曲
+    -->
+
+	</body>
+	<script type="text/javascript" src="js/jq.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script>
+		//用户头像上传
+		var hurl = ''
+		files.onchange = function() {
+			var img = this.files[0]
+			var images = new FormData()
+			images.append('img', img)
+			ajax({
+				url: 'http://localhost:8000/user/img',
+				type: 'post',
+				data: images,
+				success: function(da) {
+					console.log(da)
+					var img = document.getElementById('img')
+					hurl = da
+					img.innerHTML = '<img src="' + da + '" style="width:140px;height:140px">'
+				},
+				error: function() {
+					console.log('失败')
+				}
+			})
+		}
+
+		//封面图片上传
+		var imgurl = ''
+		pic.onchange = function() {
+			var img1 = this.files[0]
+			var images = new FormData()
+			images.append('img', img1)
+			ajax({
+				url: 'http://localhost:8000/user/img',
+				type: 'post',
+				data: images,
+				success: function(da) {
+					console.log(da)
+					var imgs = document.getElementById('imgs')
+					imgurl = da
+					imgs.innerHTML = '<img src="' + da + '" style="width:140px;height:140px">'
+				},
+				error: function() {
+					console.log('失败')
+				}
+			})
+		}
+
+		//音乐上传
+		var musicurl = ''
+		music.onchange = function() {
+			div.style.width = '100%'
+			//			setInterval(function(){
+			//			div.style.width='0px'
+			//			},2000);
+			var musics = this.files[0]
+			console.log(musics)
+			var ao = new FormData()
+			ao.append('img', musics)
+			ajax({
+				url: 'http://localhost:8000/user/img',
+				type: 'post',
+				data: ao,
+				success: function(da) {
+					console.log(da)
+					$('#singer').val(musics.name.split('.')[0])
+					musicurl = da
+
+				},
+				error: function() {
+					console.log('失败')
+				}
+			})
+		}
+
+		//注册
+		zhu.onclick = function() {
+			$.ajax({
+				url: 'http://localhost:8000/user/zhuce',
+				type: 'post',
+				data: {
+					user: $('#user').val(),
+					pass: $('#pass').val(),
+					hurl: hurl
+				},
+				success: function(da) {
+					alert(da)
+				},
+				error: function() {
+					console.log('失败')
+				}
+			})
+		}
+		//登录
+		de.onclick = function() {
+			ajax1({
+				url: 'http://localhost:8000/user/denglu',
+				type: 'post',
+				data: {
+					user: user.value,
+					pass: pass.value,
+				},
+				success: function(da) {
+					alert(da)
+					if(da == '登陆成功') {
+						f1.className = 'hide'
+						f2.className = 'show'
+					}
+
+				},
+				error: function() {
+					console.log('失败')
+				}
+			})
+		}
+
+
+
+		//上传文件音乐图片等
+		okay.onclick = function() {
+			$.ajax({
+				url: 'http://localhost:8000/user/lee',
+				type: 'post',
+				data: {
+					imgurl: imgurl,
+					musicurl: musicurl,
+					singer: $('#singer').val(),
+					name: $('#name').val()
+				},
+				success: function(da) {
+
+				},
+				error: function() {
+
+				}
+			})
+
+			ajax1({
+				url: 'http://localhost:8000/user/lee1',
+				type: 'get',
+				success: function(da) {
+					var datas = eval('(' + da + ')')
+					console.log(datas)
+					ss(datas)
+
+				},
+				error: function() {}
+			})
+
+		}
+
+		//创建页面信息	
+		ajax1({
+			url: 'http://localhost:8000/user/lee1',
+			type: 'get',
+			success: function(da) {
+				var datas = eval('(' + da + ')')
+				console.log(datas)
+				ss(datas)
+			},
+			error: function() {
+
+			}
+		})
+
+		//音乐页面显示账号头像
+		//	ajax1({
+		//				url: 'http://localhost:8000/user/lee2',
+		//				type: 'get',
+		//				success: function(da) {
+		//					var datas=eval('('+da+')')
+		//					console.log(datas)
+		//					var str='';
+		//					
+		//				var yonghu = document.getElementById('yonghu')
+		//				str = datas
+		//			yonghu.innerHTML = '<img src="' + datas.hurl+ '" style="width:140px;height:140px"><h6>'+"欢迎你的到来       "+datas.user+'</h1>'
+		//				},
+		//				error: function() {
+		//
+		//				}
+		//			})	
+
+		//播放
+		function music_play(i) {
+
+			for(var j = 0; j < $('audio').length; j++) {
+				$('audio')[j].pause()
+			}
+			$('audio')[i].play()
+			document.getElementsByClassName("num")[i].innerHTML++;
+		}
+//停止播放
+		function music_stop(i) {
+			$('audio')[i].pause()
+		}
+//重新播放
+		function music_stop1(i) {
+			$('audio')[i].pause()
+			$('audio')[i].currentTime = 0
+		}
+
+		//搜索功能
+		$('#search').bind('input propertychange', function() {
+			$.ajax({
+				url: 'http://localhost:8000/user/search',
+				type: 'POST',
+				data: {
+					search: $('#search').val(),
+				},
+				success: function(datas) {
+					ss(datas)
+				}
+			})
+		});
+
+
+//上传信息 封装函数
+		function ss(datas) {
+
+			var str = ''
+			for(var i in datas) {
+				str += `<tr>
+          <td><img style="width:100px;height:100px" src="${datas[i].imgurl}" /><audio src="${datas[i].musicurl}" ></audio></td>
+          <td class='num'>0</td>
+          <td>${datas[i].singer}</td>
+          <td>${datas[i].name}</td>
+          <td>${datas[i].times}</td>
+          <td><button class="btn btn-default btn-success" onclick="music_play(${i})">播放</button></td>
+          <td><button class='btn btn-default btn-danger' onclick="music_stop(${i})">暂停</button></td>
+          <td><button class='btn btn-default btn-info'  onclick="music_stop1(${i})">停止</button></td>
+          </tr>`
+			}
+			$('#tb').html(str)
+
+		}
+		
+		
+		
+		//ajax
+		function ajax(req) {
+			//	console.log(req.data)
+			if(window.XMLHttpRequest) {
+				var ajax = new XMLHttpRequest()
+			} else {
+				var ajax = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			if(req.type == 'get') {
+				ajax.open('get', req.url + '?' + strdata(req.data), true)
+				ajax.send()
+			} else {
+				ajax.open('post', req.url, true)
+				ajax.send(req.data)
+			}
+			ajax.onreadystatechange = function() {
+				if(ajax.readyState == 4) {
+					if(ajax.status >= 200 && ajax.status < 300 || ajax.status == 304) {
+						req.success(ajax.responseText)
+						//					console.log(ajax.responseText)
+					} else {
+						req.error(ajax.status)
+					}
+
+				}
+			}
+
+			function strdata(da) {
+				var arr = []
+				for(var i in da) {
+					arr.push(i + '=' + da[i])
+				}
+				var strurl = arr.join('&')
+				return strurl
+			}
+
+		}
+
+		//ajax1	
+
+		function ajax1(req) {
+			//	console.log(req.data)
+			if(window.XMLHttpRequest) {
+				var ajax = new XMLHttpRequest()
+			} else {
+				var ajax = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			if(req.type == 'get') {
+				ajax.open('get', req.url + '?' + strdata(req.data), true)
+				ajax.send()
+			} else {
+				ajax.open('post', req.url, true)
+				ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+				ajax.send(strdata(req.data))
+			}
+			ajax.onreadystatechange = function() {
+				if(ajax.readyState == 4) {
+					if(ajax.status >= 200 && ajax.status < 300 || ajax.status == 304) {
+						req.success(ajax.responseText)
+						//					console.log(ajax.responseText)
+					} else {
+						req.error(ajax.status)
+					}
+
+				}
+			}
+
+			function strdata(da) {
+				var arr = []
+				for(var i in da) {
+					arr.push(i + '=' + da[i])
+				}
+				var strurl = arr.join('&')
+				return strurl
+			}
+		}
+	</script>
+
+</html>
